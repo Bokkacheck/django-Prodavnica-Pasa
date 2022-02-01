@@ -1,0 +1,64 @@
+{% extends "SalonPasa/base.html" %}
+{% load static %}
+{% block title %} Korpa za kupovinu {% endblock %}
+{% block content %}
+<h1>Korpa za kupovinu</h1>
+<table class="cart">
+    <thead>
+    <tr>
+        <th>Slika</th>
+        <th>Pas</th>
+        <th>Kolicina</th>
+        <th>Ukloni iz korpe</th>
+        <th>Cena po komadu</th>
+        <th>Cena</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for stavka in korpa %}
+    {% with pas=stavka.pas %}
+    <tr>
+        <td>
+            <a href="{{ pas.ApsolutniURL }}">
+                <img src="{% if pas.slika %}{{ pas.slika.url }}
+{% else %}{% static " img\\no_image.png" %}{% endif %}">
+            </a>
+        </td>
+        <td>{{ pas.naziv }}</td>
+        <td>
+            <form action="{% url "Korpa:DodajUKorpu" pas.id %}" method="post">
+            {{ stavka.formazaazuriranjekolicine.kolicina }}
+            {{ stavka.formazaazuriranjekolicine.dodati_na_kolicinu }}
+            <input type="submit" value="Azuriraj">
+            {% csrf_token %}
+            </form>
+        </td>
+        <td>
+            <form action="{% url "Korpa:UkloniIzKorpe" pas.id %}" method="post">
+            <input type="submit" value="Ukloni">
+            {% csrf_token %}
+            </form>
+        </td>
+        <td class="num">${{ stavka.cena }}</td>
+        <td class="num">${{ stavka.ukupna_cena }}</td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+    <tr class="total">
+        <td>Total</td>
+        <td colspan="4"></td>
+        <td class="num">${{ korpa.UzmiUkupnuCenu }}</td>
+    </tr>
+    </tbody>
+</table>
+<p class="text-right">
+    <a href="{% url "SalonPasa:ListaPasa" %}" class="button
+    light">Nastavak kupovine</a>
+    <!-- ovde ce se kasnije dodati link za proveru porudzbine -->
+
+        <a href="{% url "Porudzbina:KreiranjePorudzbine" %}"
+class="button">Provera</a>
+
+
+</p>
+{% endblock %}

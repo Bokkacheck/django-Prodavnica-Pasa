@@ -1,0 +1,30 @@
+{% extends "SalonPasa/base.html" %}
+{% load static %}
+{% block title %} {% if tipPsa %}{{ tipPsa.naziv }}{% else %}Psi{% endif %}
+{% endblock %}
+{% block content %}
+<div id="sidebar"><h3>Tipovi psa</h3>
+    <ul>
+        <li {% if not tipPsa %}class="selected" {% endif %}>
+            <a href="{% url "SalonPasa:ListaPasa" %}">All</a> </li>
+        {% for c in tipoviPsa %}
+        <li {% if tipPsa.slug == c.slug %}class="selected" {% endif %}>
+            <a href="{{ c.ApsolutniURL }}">{{ c.naziv }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div id="main" class="product-list">
+    <h1>{% if tipPsa %}{{ tipPsa.naziv }}{% else %}Psi{% endif %}</h1>
+    {% for pas in psi %}
+    <div class="item">
+        <a href="{{ pas.ApsolutniURL }}">
+            <img src="{% if pas.slika %}{{ pas.slika.url }}
+{% else %}{% static " img/no_image.png" %}{% endif %}"></a>
+        <a href="{{ pas.ApsolutniURL }}">{{ pas.naziv }}</a>
+        <br>
+        &euro;{{ pas.cena }}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

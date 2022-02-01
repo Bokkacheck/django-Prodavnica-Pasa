@@ -1,0 +1,29 @@
+{% extends "SalonPasa/base.html" %}
+{% load static %}
+{% block title %}
+{{ pas.naziv }}
+{% endblock %}
+{% block content %}
+<div class="product-detail">
+    <img src="{% if pas.slika %}{{ pas.slika.url }}
+{% else %} {% static " img/no_image.png" %}{% endif %}">
+    <h1>{{ pas.naziv }}</h1>
+    <h2>
+        <a href="{{ pas.tipPsa.ApsolutniURL }}">
+            {{ pas.tipPsa }}
+        </a>
+    </h2>
+    <p class="price">&euro;{{ pas.cena }}</p>
+    <!-- ovde ce biti za korpu-->
+    {{ pas.opis|linebreaks }}
+
+    <form action="{% url "Korpa:DodajUKorpu" pas.id %}"
+    method="post">
+    {{ formazadodavanjepasaukorpu }}
+    {% csrf_token %}
+    <input type="submit" value="Dodaj u korpu">
+    </form>
+
+
+</div>
+{% endblock %}
